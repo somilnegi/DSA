@@ -1,0 +1,1 @@
+g++ -std=c++11 -o sic_xe sic_xe.cpp table.cpp
