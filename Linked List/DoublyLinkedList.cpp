@@ -108,11 +108,101 @@ Node *removeKth(Node *head, int k)
     return head;
 }
 
+void removeNode(Node *temp)
+{
+    Node *back = temp->prev;
+    Node *front = temp->next;
+    if (front == NULL)
+    {
+        back->next = NULL;
+        delete temp;
+        return;
+    }
+    back->next = front;
+    front->prev = back;
+    delete temp;
+    return;
+}
+
+Node *insertBeforeHead(Node *head, int val)
+{
+    Node *newNode = new Node(val, NULL, head);
+    head->prev = newNode;
+    return newNode;
+}
+Node *insertAfterHead(Node *head, int val)
+{
+    Node *newNode = new Node(val, head, head->next);
+    head->next->prev = newNode;
+    head->next = newNode;
+    return head;
+}
+
+Node *insertBeforeTail(Node *head, int val)
+{
+    Node *newNode = new Node(val);
+    Node *temp = head;
+    while (temp->next->next != NULL)
+    {
+        temp = temp->next;
+    }
+    newNode->prev = temp;
+    newNode->next = temp->next;
+    temp->next->prev = newNode;
+    temp->next = newNode;
+    return head;
+}
+
+Node *insertAfterTail(Node *head, int val)
+{
+    Node *newNode = new Node(val);
+    Node *temp = head;
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+    newNode->prev = temp;
+    return head;
+}
+
+Node *insertKth(Node *head, int k, int val)
+{
+    Node *newNode = new Node(val);
+    if (k == 1)
+    {
+        newNode->next = head;
+        if (head != NULL)
+        {
+            head->prev = newNode;
+        }
+        return newNode;
+    }
+    Node *temp = head;
+    int count = 0;
+    while (temp != NULL)
+    {
+        count++;
+        if (count == k)
+        {
+            break;
+        }
+        temp = temp->next;
+    }
+    newNode->prev = temp->prev;
+    newNode->next = temp;
+    temp->prev->next = newNode;
+    temp->prev = newNode;
+    return head;
+}
+
 int main()
 {
     vector<int> arr = {12, 5, 8, 7};
     Node *head = convertArrToLL(arr);
-    head = removeKth(head, 2);
+    // head = removeKth(head, 2);
+    // removeNode(head->next);
+    head = insertKth(head, 3, 10);
     print(head);
     return 0;
 }
